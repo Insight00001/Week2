@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
-import seaborn as sns
-import altair as alt
+
 st.set_page_config(
     page_title='School Dropout Dashboard',
     layout='wide',

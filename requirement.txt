@@ -1,5 +1,4 @@
 pandas
-seaborn
 plotly-express
 streamlit
 plotlys
