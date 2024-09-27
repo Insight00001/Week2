@@ -11,7 +11,7 @@ st.set_page_config(
     page_icon="bar_chart",
     layout='wide'
 )
-    
+st.title('Exploratory Data Analysis for Student dropout')
 def Categorical_columns(data):
     categorical_columns =['Marital status','Application mode','Application order',"Daytime/evening attendance\t",
                       'Previous qualification','Nacionality','Debtor','Tuition fees up to date', 'Gender', 'Scholarship holder',
@@ -56,6 +56,22 @@ def preprocess_data():
 
 df = pd.read_csv('cleaned_data.csv')
 #df['Daytime/evening attendance\t'] = df['Daytime/evening attendance\t'].str.replace('\t', '')
+total_students = df.value_counts().sum()
+total_male = df[df['Gender']==1].value_counts().sum()
+total_female = df[df['Gender']==0].value_counts().sum()
+
+col1,col2,col3=st.columns(3)
+with col1:
+    st.subheader('Total students')
+    st.subheader(total_students)
+with col2:
+    st.subheader('Total female')
+    st.subheader(total_female)
+with col3:
+    st.subheader('Total male')
+    st.subheader(total_male)
+
+st.divider()
 
 Categorical_columns(df)
 map_data(df)
@@ -118,8 +134,23 @@ fig = px.imshow(data_numeric.corr(),text_auto=True,
                 aspect='auto', title="Correlation Heatmap of Numeric Data",
                 color_continuous_scale='Blues',height=600,width=1500)
 st.plotly_chart(fig)
+def percentage_display():
+    percentage_data = pd.read_csv('percentage table.csv')   
+    tp_percentage_table = percentage_data.T
+    tp_percentage_table = tp_percentage_table.reset_index()
+    tp_percentage_table_=tp_percentage_table.columns=['Category','Percentage']
+    tp_percentage_table=tp_percentage_table[1:]
+    return tp_percentage_table
+pt =percentage_display()
+fig_ = px.pie(pt, 
+             values='Percentage', 
+             names='Category',
+             title='Percentage Distribution of Total',
+             color_discrete_sequence=px.colors.sequential.Plasma)
 
-        
+    # Display the Plotly pie chart in Streamlit
+st.plotly_chart(fig_, use_container_width=True)
+st.divider()
 st.subheader('Principal Component Analysis')
 pca_number = st.slider('Select Number of Component',min_value=2,max_value=4)
 
